@@ -14,7 +14,7 @@ Hyper Thread is simple, flexible thread pool library for Ruby.
 require 'hyper_thread'
 
 # make a pool of maximum 7 threads
-pool = HyperThread.pool.new(max: 10)
+pool = HyperThread.pool.new(max: 7)
 
 # spawn 7 threads, and 3 jobs will be added to the queue
 pool.async(count: 10) do
