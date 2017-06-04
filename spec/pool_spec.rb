@@ -1,7 +1,7 @@
 require "spec_helper"
 
 RSpec.describe HyperThread::Pool do
-    
+
   subject(:pool) { HyperThread.pool.new }
 
   describe ".new" do
@@ -21,21 +21,21 @@ RSpec.describe HyperThread::Pool do
   end
 
   describe ".async" do
-    
+
     it "spawns threads to be run asynchronously, adding them to the pool" do
       pool.async do
         2 + 5        
       end 
       expect(pool.threads.count).to be 1
     end
-    
+
     it "spawns threads to be run asynchronously, optionally running forever in a loop" do
       pool.async(forever: true) do
         2 + 5        
       end 
       expect(pool.threads.map(&:alive?).count).to be 1
     end
-    
+
     it "spawns threads to be run asynchronously, optionally providing a count to spawn X ammount of times" do
       pool.async(count: 2) do
         52 - 10
@@ -45,7 +45,7 @@ RSpec.describe HyperThread::Pool do
 
     context "when there are no threads in the pool" do
       after { pool.shutdown }
-      
+
       it "allows threads to be spawned to be ran asynchronously, and added to the pool" do
         pool.async do 
           2 + 2
@@ -56,7 +56,7 @@ RSpec.describe HyperThread::Pool do
     end
 
     context "when there are threads in the pool" do
-      
+
       before { pool.async(count: 2) { 3 + 4 } }
       after  { pool.shutdown }
 
@@ -67,7 +67,7 @@ RSpec.describe HyperThread::Pool do
         end
         expect(threads.size).to be 2
       end
-      
+
       it "will queue up jobs that go beyond the maximum number of the pooled threads" do
         pool.async do 
           2 + 2
@@ -76,9 +76,9 @@ RSpec.describe HyperThread::Pool do
       end
 
     end
-    
+
     context "when the pool is maxed out" do
-      
+
       before { pool.async(count: 2) { 3 + 4 } }
       after  { pool.shutdown }
 
@@ -88,7 +88,7 @@ RSpec.describe HyperThread::Pool do
         end
         expect(pool.queue.size).to be 1
       end
-      
+
       it "can have have the max change and adjust the thread pool accordinly" do
         pool.max = 3
         pool.async do 
@@ -110,7 +110,7 @@ RSpec.describe HyperThread::Pool do
     end
 
     context "when there are threads in the pool" do
-      
+
       before { pool.async(count: 2) { 3 + 4 } }
       after  { pool.shutdown }
 
