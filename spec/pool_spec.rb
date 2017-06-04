@@ -102,4 +102,18 @@ RSpec.describe HyperThread::Pool do
 
   end
 
+  describe ".qsync" do
+
+    it "provides a way to add jobs to the job queue" do
+      now = pool.queue.size
+      more = 1
+      expect(pool.queue.size).to be now
+      pool.qsync(count: more) do
+        2 + 2
+      end
+      sleep 0.2 # because, non blocking, may need to wait to happen
+      expect(pool.queue.size).to eq(now + more)
+    end
+
+  end
 end
