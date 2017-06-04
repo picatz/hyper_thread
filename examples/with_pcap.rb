@@ -23,14 +23,14 @@ parse_pool = HyperThread.pool.new(max: 5)
 
 parse_pool.async(forever: true, count: parse_pool.max) do
   next unless packet = packets.pop
-	puts packet.size
+  puts packet.size
 end
 
 sleep 2 # let it run for roughly 2 seconds
 
 puts "shutting down capture and parsing pools"
 [ cap_pool, parse_pool ].each do |pool|
-	pool.shutdown
+  pool.shutdown
 end
 
 exit 0
