@@ -1,13 +1,27 @@
 module HyperThread
   class Pool
-    attr_reader :max
-    attr_reader :queue
+    attr_reader   :queue
 
     def initialize(max: 2)
       @threads = []
       @mutex   = Mutex.new  
       @queue   = Queue.new  
       @max     = max.to_i   
+    end
+
+    def max=(value)
+      nsync do
+        if value > @max
+          dead = @threads.sample(value).map(&:exit)
+          @threads -= dead
+        end
+        @max = value
+        return true
+      end
+    end
+
+    def max
+      @max
     end
 
     def threads
